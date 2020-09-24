@@ -7,28 +7,23 @@
 
 {% block body %}
 <div class="content">
-    <h1 style="text-align: center">{{folder.name}}</h1>
-
-
+    <h1 style="text-align: center">OCR Database</h1>
     <table>
         <tr>
-            <th>Document</th>
-            <th>Page Number</th>
+            <th>Task</th>
             <th>Uploaded by</th>
             <th>Creation Date</th>
-
             <th>Action</th>
 
 
         </tr>
-        {% for document in documents %}
+        {% for folder in folders %}
         <tr>
-            <td>{{ document.name }}</td>
-            <td>{{ document.page_number }}</td>
-            <td>{{ document.uploader }}</td>
-            <td>{{ document.creation_date }}</td>
+            <td>{{ folder.name }}</td>
+            <td>{{ folder.uploader }}</td>
+            <td>{{ folder.creation_date }}</td>
             <td>
-                <a href="/document/{{document.id}}">Open</a>
+                <a href="/folder/{{folder.id}}">Open</a>
                 <br>
                 <a href="/delete/{{folder.id}}">Delete</a>
                 <br>
