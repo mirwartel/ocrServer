@@ -1,16 +1,16 @@
-mir makarova, [24.09.20 13:55]
 import cv2
-import numpy as np
 import pytesseract
-from fpdf import FPDF
+import numpy as np
+
 
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
-img = cv2.imread("src/files/uploadImages/ocrBook.jpg")
+img = cv2.imread("static/uploads/example_01.png")
+
 
 def wordBox(image):
     rgb = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB )
-    boxes = pytesseract.image_to_data(image, lang="script/latin")
+    boxes = pytesseract.image_to_data(image, lang="eng+swe")
 
 
     for x, b in enumerate(boxes.splitlines()):
@@ -27,7 +27,7 @@ def wordBox(image):
 def detectChars(image):
     result = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB )
     hImg, wImg,_ = result.shape
-    boxes = pytesseract.image_to_boxes(image, lang="swe")
+    boxes = pytesseract.image_to_boxes(image, lang="eng+swe")
 
 
     for b in boxes.splitlines():
@@ -59,15 +59,15 @@ def resizeW(w, image):
 
 img = resizeW(1500, img)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-adaptive_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 95, 11)
+adaptive_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 85, 15)
 
-text = pytesseract.image_to_string(adaptive_threshold, lang='swe')
+text = pytesseract.image_to_string(adaptive_threshold, lang='eng+swe')
 
 print(text)
 
-#cv2.imshow('Result', adaptive_threshold)
-#cv2.imshow('box', wordBox(adaptive_threshold))
-cv2.imshow('chars', detectChars(adaptive_threshold))
+cv2.imshow('Result', gray)
+cv2.imshow('box', wordBox(gray))
+cv2.imshow('chars', detectChars(gray))
 cv2.waitKey(0)
-with open('src/files/textOutput/file.txt', mode ='w') as f:
+with open('static/textFiles/file.text', mode ='w') as f:
     f.write(text)

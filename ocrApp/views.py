@@ -3,6 +3,7 @@ from ocrApp import app
 from flask import render_template, request, redirect
 
 from ocrApp.models import Todo, Folder, Document
+from ocrApp.ocrEngine2 import runOcrEngine2
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -45,19 +46,20 @@ def folder(id):
 def document(id):
     document_to_open = Document.query.get_or_404(id)
     if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
         try:
-            db.session.add(new_task)
+            img = document_to_open.image_original
+
+            text = runOcrEngine2(img, "file.text")
+
+            document_to_open.text = text
             db.session.commit()
-            return redirect('/')
+            return render_template("document.html", document=document_to_open)
         except:
-            return 'There was an issue adding your task.'
+            print(document_to_open.image_original)
+            return 'There was an issue with the OCR.'
     else:
 
-
         return render_template("document.html", document=document_to_open)
-
 
 
 @app.route('/delete/<int:id>')
