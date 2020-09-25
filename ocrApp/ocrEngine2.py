@@ -64,6 +64,7 @@ def detectChars(image):
 #
 
 def runOcrEngine2(img, file):
+    print(file)
 
 
     img = cv2.imread("static/uploads/"+img)
@@ -73,7 +74,8 @@ def runOcrEngine2(img, file):
     print(text)
     with open('static/textFiles/'+file, mode='w') as f:
         f.write(text)
+        f.close()
     return text
 
 
-#runOcrEngine2("static/uploads/example_01.png", "file.text")
+#runOcrEngine2("example_01.png", "file2.text")

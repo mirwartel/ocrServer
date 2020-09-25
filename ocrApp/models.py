@@ -10,7 +10,7 @@ from sqlalchemy import create_engine, MetaData, Table
 
 
 class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key="true")
+    id = db.Column(db.Integer, primary_key="true", nullable=False,)
     content = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -20,10 +20,10 @@ class Todo(db.Model):
 
 class Folder(db.Model):
     __tablename__ = 'folders'
-    id = db.Column(db.Integer, primary_key="true")
+    id = db.Column(db.Integer, primary_key="true", nullable=False,)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    uploader = db.Column(db.String, db.ForeignKey('users.username'))
-    name = db.Column(db.String)
+    uploader = db.Column(db.String, db.ForeignKey('users.username'), nullable=False,)
+    name = db.Column(db.String, nullable=False,)
     users = db.relationship("User")
 
     def __repr__(self):
@@ -32,17 +32,17 @@ class Folder(db.Model):
 
 class Document(db.Model):
     __tablename__ = 'documents'
-    id = db.Column(db.Integer, primary_key="true")
+    id = db.Column(db.Integer, primary_key="true", nullable=False,)
     page_number = db.Column(db.Integer, nullable=False, )
-    text = db.Column(db.String)
-    name = db.Column(db.String)
-    image_original = db.Column(db.String)
-    image_processed = db.Column(db.String)
-    image_boxes = db.Column(db.String)
+    text = db.Column(db.String, default=None)
+    name = db.Column(db.String, default=None)
+    image_original = db.Column(db.String, default=None)
+    image_processed = db.Column(db.String, default=None)
+    image_boxes = db.Column(db.String, default=None)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    uploader = db.Column(db.String, db.ForeignKey('users.username'))
+    uploader = db.Column(db.String, db.ForeignKey('users.username'), nullable=False,)
     users = db.relationship("User")
-    folder = db.Column(db.Integer, db.ForeignKey('folders.id'))
+    folder = db.Column(db.Integer, db.ForeignKey('folders.id'), nullable=False,)
     folders = db.relationship("Folder")
 
     def __repr__(self):
@@ -51,11 +51,11 @@ class Document(db.Model):
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key="true")
-    username = db.Column(db.String)
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    password = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key="true", nullable=False,)
+    username = db.Column(db.String, nullable=False,)
+    first_name = db.Column(db.String, nullable=False,)
+    last_name = db.Column(db.String, nullable=False,)
+    password = db.Column(db.String, nullable=False,)
 
     def __repr__(self):
         return '<User %r>' % self.username

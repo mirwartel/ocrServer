@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Task Master</title>
+{% endblock %}
+
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">Create New Document</h1>
+
+
+    <div class="form">
+        <form action="/folder/{{folder.id}}/create_new_document" method="POST" enctype="multipart/form-data">
+            <input type="text" name="name" id="name">
+            <label for="image_original">Select image:</label>
+            <input type="file" name="image_original" id="image_original" accept="image/*">
+            <input type="submit" value="Add New Document">
+        </form>
+    </div>
+</div>
+
+{% endblock %}
