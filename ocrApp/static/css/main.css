@@ -1,26 +1,59 @@
 body {
 
+
+  background-color: #eee;
+
+  padding-top: 50px;
+
   text-align: center;
 
 
   font-family: sans-serif;
+
+  padding-top: 50px;
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+}
+th {
+padding: 10px;
+
+    text-align:center
+
+
 }
 
+
+
 table {
+
+    text-align: center;
+
+    table-layout: auto;
     margin-left:auto;
     margin-right:auto;
     border-collapse: collapse;
+
 }
 
 td{
-align: center;
-padding: 5px;
+    white-space: nowrap;
+    align: center;
+    padding: 5px;
     border: 1px solid #333;
 }
+
+
 
 .form{
     text-align: center;
     margin-top: 20px;
+}
+
+input[type=file] {
+    margin: 0 auto;
 }
 
 #content{

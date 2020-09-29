@@ -1,20 +1,37 @@
 {% extends 'base.html' %}
+{% set active_page = "folder{{folder.id}}" %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/main.css')}}">
 
-{% block head %}
-<title>OCR Database</title>
+{% endblock %}
+
+{% block title %}
+OCR Database Folders
+{% endblock %}
+
+{% block navbar %}
+{{super()}}
 {% endblock %}
 
 
-{% block body %}
+{% block content %}
 <div class="content">
-    <h1 style="text-align: center">{{folder.name}}</h1>
+    <h1 style="text-align: center">Folder: {{folder.name}}</h1>
+    <br>
+
+    <form action="/folder/{{folder.id}}/create_new_document">
+        <input type="submit" value="Add new Document to folder"/>
+
+    </form>
+    <br>
 
 
     <table>
         <tr>
             <th>Document</th>
             <th>Page Number</th>
-            <th>Uploaded by</th>
+            <th>Uploader</th>
             <th>Creation Date</th>
 
             <th>Action</th>
@@ -37,7 +54,7 @@
         </tr>
         {% endfor %}
     </table>
-  <a href="/folder/{{folder.id}}/create_new_document">Create New Document</a>
+
 </div>
 
 {% endblock %}

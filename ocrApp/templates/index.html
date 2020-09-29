@@ -1,20 +1,28 @@
 {% extends 'base.html' %}
+{% set active_page = "index" %}
 
-{% block head %}
-<title>OCR Database</title>
-{% endblock %}
 {% block styles %}
 {{super()}}
 <link rel="stylesheet" href="{{url_for('.static', filename='css/main.css')}}">
+
 {% endblock %}
 
-{% block body %}
+{% block title %}
+OCR Database
+{% endblock %}
+
+{% block navbar %}
+{{super()}}
+{% endblock %}
+
+{% block content %}
 <div class="content">
+
     <h1 style="text-align: center">OCR Database</h1>
     <table>
         <tr>
             <th>Task</th>
-            <th>Uploaded by</th>
+            <th>Uploader</th>
             <th>Creation Date</th>
             <th>Action</th>
 
@@ -35,10 +43,6 @@
         </tr>
         {% endfor %}
     </table>
-    <form action="/" method="POST">
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Add Task">
-    </form>
-</div>
 
+</div>
 {% endblock %}

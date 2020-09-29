@@ -1,6 +1,5 @@
 import os
 
-
 from werkzeug.utils import secure_filename
 
 from ocrApp import db
@@ -15,6 +14,7 @@ from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_bootstrap import Bootstrap
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 login_manager = LoginManager()
@@ -22,50 +22,29 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
 def index():
-    if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue adding your task.'
-    else:
-        folders = Folder.query.order_by(Folder.id).all()
-        print(folders)
-        return render_template("index.html", folders=folders)
+    folders = Folder.query.order_by(Folder.id).all()
+    print(folders)
+    return render_template("index.html", folders=folders)
 
 
-@app.route('/folder/<int:id>', methods=['POST', 'GET'])
-@login_required
+@app.route('/folder/<int:id>', methods=['GET'])
 def folder(id):
     folder_to_open = Folder.query.get_or_404(id)
-    if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue adding your task.'
-    else:
 
-        documents = Document.query.filter_by(folder=id).all()
-        print(documents)
-        return render_template("folder.html", folder=folder_to_open, documents=documents)
+    documents = Document.query.filter_by(folder=id).all()
+    print(documents)
+    return render_template("folder.html", folder=folder_to_open, documents=documents)
 
 
 @app.route('/folder/<int:id>/create_new_document', methods=['POST', 'GET'])
+@login_required
 def create_new_document(id):
     uploader = 'user'  # create login system to replace
     folder_to_open = Folder.query.get_or_404(id)
@@ -138,37 +117,35 @@ def document(id):
         return render_template("document.html", document=document_to_open, text=textFromFile)
 
 
-@app.route('/delete/<int:id>')
-def delete(id):
-    task_to_delete = Todo.query.get_or_404(id)
-
-    try:
-        db.session.delete(task_to_delete)
-        db.session.commit()
-        return redirect('/')
-    except:
-        return 'There was a problem deleting that task.'
-
-
-@app.route('/update/<int:id>', methods=['POST', 'GET'])
-def update(id):
-    task = Todo.query.get_or_404(id)
-    if request.method == 'POST':
-        task.content = request.form['content']
-        try:
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was a problem updating that task.'
-    else:
-        return render_template('update.html', task=task)
-
+# @app.route('/delete/<int:id>')
+# def delete(id):
+#     task_to_delete = Todo.query.get_or_404(id)
+#
+#     try:
+#         db.session.delete(task_to_delete)
+#         db.session.commit()
+#         return redirect('/')
+#     except:
+#         return 'There was a problem deleting that task.'
+#
+#
+# @app.route('/update/<int:id>', methods=['POST', 'GET'])
+# def update(id):
+#     task = Todo.query.get_or_404(id)
+#     if request.method == 'POST':
+#         task.content = request.form['content']
+#         try:
+#             db.session.commit()
+#             return redirect('/')
+#         except:
+#             return 'There was a problem updating that task.'
+#     else:
+#         return render_template('update.html', task=task)
+#
 
 @login_manager.user_loader
 def user_loader(user_id):
-
     return User.query.get(user_id)
-
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -181,10 +158,15 @@ def login():
                 login_user(user, remember=form.remember.data)
                 return redirect(url_for('index'))
 
-
         return '<h1> invalid username or password</h1>'
 
     return render_template('login.html', form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect('/')
 
 
 @app.route('/signup', methods=['POST', 'GET'])

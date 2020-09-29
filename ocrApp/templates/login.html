@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% set active_page = "login" %}
 {% block title %}
 Login
 {% endblock %}
@@ -9,8 +9,10 @@ Login
 {{super()}}
 <link rel="stylesheet" href="{{url_for('.static', filename='css/signin.css')}}">
 {% endblock %}
-
-{% block body %}
+{% block navbar %}
+{{super()}}
+{% endblock %}
+{% block content %}
 <div class="container">
 
     <form class="form-signin" method="POST" accesskey="/login">
